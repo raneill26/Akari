@@ -116,25 +116,56 @@ public class ModelImpl implements Model {
     if (r < 0 || r >= height || c < 0 || c >= width) {
       throw new IndexOutOfBoundsException();
     }
-    if (activePuzzle.getCellType(r, c) != CellType.CORRIDOR) {
+    if (!isLamp(r, c)) {
       throw new IllegalArgumentException();
     }
-    if (!lamps[r][c]) {
-      throw new IllegalArgumentException();
-    }
-
-    for (int i = 0; i < width; i++) { // for rows
-      if (i != c && lamps[r][i] && isVisible(r, c, r, i)) {
-        return true;
+    // columns
+    for (int i = c - 1; i >= 0; i--) {
+      if (activePuzzle.getCellType(r, i) == CellType.CORRIDOR) {
+        if (isLamp(r, i)) {
+          return true;
+        }
+      }
+      if (activePuzzle.getCellType(r, i) == CellType.WALL
+          || activePuzzle.getCellType(r, i) == CellType.CLUE) {
+        break;
       }
     }
 
-    for (int i = 0; i < height; i++) { // for columns
-      if (i != r && lamps[i][c] && isVisible(r, c, i, c)) {
-        return true;
+    for (int i = c + 1; i < 0; i++) {
+      if (activePuzzle.getCellType(r, i) == CellType.CORRIDOR) {
+        if (isLamp(r, i)) {
+          return true;
+        }
+      }
+      if (activePuzzle.getCellType(r, i) == CellType.WALL
+          || activePuzzle.getCellType(r, i) == CellType.CLUE) {
+        break;
       }
     }
-
+    // rows
+    for (int i = r - 1; i >= 0; i--) {
+      if (activePuzzle.getCellType(i, c) == CellType.CORRIDOR) {
+        if (isLamp(i, c)) {
+          return true;
+        }
+      }
+      if (activePuzzle.getCellType(i, c) == CellType.WALL
+          || activePuzzle.getCellType(i, c) == CellType.CLUE) {
+        break;
+      }
+    }
+    for (int i = r + 1; i < height; i++) {
+      if (activePuzzle.getCellType(i, c) == CellType.CORRIDOR) {
+        if (isLamp(i, c)) {
+          return true;
+        }
+      }
+      if (activePuzzle.getCellType(i, c) == CellType.WALL
+          || activePuzzle.getCellType(i, c) == CellType.CLUE) {
+        break;
+      }
+    }
     return false;
   }
 
