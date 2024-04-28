@@ -57,23 +57,47 @@ public class ModelImpl implements Model {
     if (activePuzzle.getCellType(r, c) != CellType.CORRIDOR) {
       throw new IllegalArgumentException();
     }
-    if (lamps[r][c]) { // contains lamp?
+
+    if (lamps[r][c]) { // if cell is a lamp
       return true;
     }
 
-    for (int i = 0; i < width; i++) { // illuminated by lamps in a row check
-      if (i != c && lamps[r][i] && isVisible(r, c, r, i)) {
-        return true;
+    for (int i = c - 1; i >= 0; i--) { // lit from row
+      if (activePuzzle.getCellType(r, i) == CellType.WALL) {
+        break; // if wall
+      }
+      if (lamps[r][i]) {
+        return true; // lamp
       }
     }
 
-    for (int i = 0; i < height; i++) { // same for columns
-      if (i != r && lamps[i][c] && isVisible(r, c, i, c)) {
-        return true;
+    for (int i = c + 1; i < width; i++) {
+      if (activePuzzle.getCellType(r, i) == CellType.WALL) {
+        break; // if wall
+      }
+      if (lamps[r][i]) {
+        return true; // lamp
       }
     }
 
-    return false;
+    for (int i = r - 1; i >= 0; i--) { // lit from column
+      if (activePuzzle.getCellType(i, c) == CellType.WALL) {
+        break; // if wall
+      }
+      if (lamps[i][c]) {
+        return true; // lamp in column
+      }
+    }
+    for (int i = r + 1; i < height; i++) {
+      if (activePuzzle.getCellType(i, c) == CellType.WALL) {
+        break; // if wall
+      }
+      if (lamps[i][c]) {
+        return true; // lamp in column
+      }
+    }
+
+    return false; // not lit yet
   }
 
   @Override
@@ -95,20 +119,22 @@ public class ModelImpl implements Model {
     if (activePuzzle.getCellType(r, c) != CellType.CORRIDOR) {
       throw new IllegalArgumentException();
     }
-    if (!lamps[r][c]) { // no lamp at cell
+    if (!lamps[r][c]) {
       throw new IllegalArgumentException();
     }
 
-    for (int i = 0; i < height; i++) { // another lamp in same r/c check
-      if (i != r && lamps[i][c]) {
-        return true; // column
+    for (int i = 0; i < width; i++) { // for rows
+      if (i != c && lamps[r][i] && isVisible(r, c, r, i)) {
+        return true;
       }
     }
-    for (int j = 0; j < width; j++) {
-      if (j != c && lamps[r][j]) {
-        return true; // row
+
+    for (int i = 0; i < height; i++) { // for columns
+      if (i != r && lamps[i][c] && isVisible(r, c, i, c)) {
+        return true;
       }
     }
+
     return false;
   }
 
@@ -152,7 +178,7 @@ public class ModelImpl implements Model {
 
   @Override
   public boolean isSolved() {
-    for (int i = 0; i < height; i++) { // clues check
+    for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         if (activePuzzle.getCellType(i, j) == CellType.CLUE && !isClueSatisfied(i, j)) {
           return false;
@@ -160,9 +186,10 @@ public class ModelImpl implements Model {
       }
     }
 
-    for (int i = 0; i < height; i++) { // corridors lit
+    for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
-        if (activePuzzle.getCellType(i, j) == CellType.CORRIDOR && !isLit(i, j)) {
+        if (activePuzzle.getCellType(i, j) == CellType.CORRIDOR
+            && (!isLit(i, j) || isLampIllegal(i, j))) {
           return false;
         }
       }
@@ -202,10 +229,9 @@ public class ModelImpl implements Model {
 
   // ************* HELPER METHODS ************* //
 
-  private boolean isVisible(
-      int r1, int c1, int r2, int c2) { // iterates through to see if lamp is visible from position
-    int dr = (r2 - r1) / Math.max(Math.abs(r2 - r1), 1);
-    int dc = (c2 - c1) / Math.max(Math.abs(c2 - c1), 1);
+  private boolean isVisible(int r1, int c1, int r2, int c2) {
+    int dr = Integer.compare(r2, r1);
+    int dc = Integer.compare(c2, c1);
     int r = r1 + dr;
     int c = c1 + dc;
     while (r != r2 || c != c2) {
