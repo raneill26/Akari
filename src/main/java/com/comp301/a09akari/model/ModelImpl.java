@@ -113,7 +113,9 @@ public class ModelImpl implements Model {
 
   @Override
   public boolean isLampIllegal(int r, int c) {
-    if (r < 0 || r >= height || c < 0 || c >= width) {
+    int h = activePuzzle.getHeight();
+    int w = activePuzzle.getWidth();
+    if (r < 0 || r >= h || c < 0 || c >= w) {
       throw new IndexOutOfBoundsException();
     }
     if (!isLamp(r, c)) {
@@ -132,7 +134,7 @@ public class ModelImpl implements Model {
       }
     }
 
-    for (int i = c + 1; i < 0; i++) {
+    for (int i = c + 1; i < w; i++) {
       if (activePuzzle.getCellType(r, i) == CellType.CORRIDOR) {
         if (isLamp(r, i)) {
           return true;
@@ -155,7 +157,7 @@ public class ModelImpl implements Model {
         break;
       }
     }
-    for (int i = r + 1; i < height; i++) {
+    for (int i = r + 1; i < h; i++) {
       if (activePuzzle.getCellType(i, c) == CellType.CORRIDOR) {
         if (isLamp(i, c)) {
           return true;
@@ -259,7 +261,6 @@ public class ModelImpl implements Model {
   }
 
   // ************* HELPER METHODS ************* //
-
   private boolean isVisible(int r1, int c1, int r2, int c2) {
     int dr = Integer.compare(r2, r1);
     int dc = Integer.compare(c2, c1);
