@@ -51,48 +51,55 @@ public class ModelImpl implements Model {
 
   @Override
   public boolean isLit(int r, int c) {
-    if (r < 0 || r >= height || c < 0 || c >= width) {
+    int h = activePuzzle.getHeight();
+    int w = activePuzzle.getWidth();
+    if (r < 0 || r >= h || c < 0 || c >= w) {
       throw new IndexOutOfBoundsException();
     }
     if (activePuzzle.getCellType(r, c) != CellType.CORRIDOR) {
       throw new IllegalArgumentException();
     }
 
-    if (lamps[r][c]) { // if cell is a lamp
+    if (isLamp(r, c)) { // if cell is a lamp, must be lit
       return true;
     }
 
-    for (int i = c - 1; i >= 0; i--) { // lit from row
-      if (activePuzzle.getCellType(r, i) == CellType.WALL) {
-        break; // if wall
+    for (int i = c - 1; i >= 0; i--) { // lit from column
+      if (activePuzzle.getCellType(r, i) == CellType.WALL
+          || activePuzzle.getCellType(r, i) == CellType.CLUE) {
+        break; // if wall or clue
       }
-      if (lamps[r][i]) {
-        return true; // lamp
-      }
-    }
-
-    for (int i = c + 1; i < width; i++) {
-      if (activePuzzle.getCellType(r, i) == CellType.WALL) {
-        break; // if wall
-      }
-      if (lamps[r][i]) {
-        return true; // lamp
+      if (isLamp(r, i)) {
+        return true; // lamp in view
       }
     }
 
-    for (int i = r - 1; i >= 0; i--) { // lit from column
-      if (activePuzzle.getCellType(i, c) == CellType.WALL) {
+    for (int i = c + 1; i < w; i++) {
+      if (activePuzzle.getCellType(r, i) == CellType.WALL
+          || activePuzzle.getCellType(r, i) == CellType.CLUE) {
+        break; // if wall or clue
+      }
+      if (isLamp(r, i)) {
+        return true; // lamp in view
+      }
+    }
+
+    for (int i = r - 1; i >= 0; i--) { // lit from row
+      if (activePuzzle.getCellType(i, c) == CellType.WALL
+          || activePuzzle.getCellType(i, c) == CellType.CLUE) {
         break; // if wall
       }
-      if (lamps[i][c]) {
+      if (isLamp(i, c)) {
         return true; // lamp in column
       }
     }
-    for (int i = r + 1; i < height; i++) {
-      if (activePuzzle.getCellType(i, c) == CellType.WALL) {
+
+    for (int i = r + 1; i < h; i++) {
+      if (activePuzzle.getCellType(i, c) == CellType.WALL
+          || activePuzzle.getCellType(i, c) == CellType.CLUE) {
         break; // if wall
       }
-      if (lamps[i][c]) {
+      if (isLamp(i, c)) {
         return true; // lamp in column
       }
     }
