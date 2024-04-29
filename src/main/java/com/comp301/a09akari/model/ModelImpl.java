@@ -275,7 +275,7 @@ public class ModelImpl implements Model {
     observers.remove(observer);
   }
 
-  private void notifyObservers() {
+  public void notifyObservers() {
     for (ModelObserver observer : observers) {
       observer.update(this);
     }
