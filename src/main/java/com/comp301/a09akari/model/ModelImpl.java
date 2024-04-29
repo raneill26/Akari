@@ -218,24 +218,35 @@ public class ModelImpl implements Model {
 
   @Override
   public boolean isSolved() {
-    for (int i = 0; i < height; i++) {
-      for (int j = 0; j < width; j++) {
-        if (activePuzzle.getCellType(i, j) == CellType.CLUE && !isClueSatisfied(i, j)) {
-          return false;
+    int h = activePuzzle.getHeight();
+    int w = activePuzzle.getWidth();
+    // lit corridors check
+    for (int r = 0; r < h; r++) {
+      for (int c = 0; c < w; c++) {
+        if (activePuzzle.getCellType(r, c) == CellType.CORRIDOR && !isLit(r, c)) {
+          return false; // unlit corridors
         }
       }
     }
 
-    for (int i = 0; i < height; i++) {
-      for (int j = 0; j < width; j++) {
-        if (activePuzzle.getCellType(i, j) == CellType.CORRIDOR
-            && (!isLit(i, j) || isLampIllegal(i, j))) {
-          return false;
+    // clues satisfied check
+    for (int r = 0; r < h; r++) {
+      for (int c = 0; c < w; c++) {
+        if (activePuzzle.getCellType(r, c) == CellType.CLUE && !isClueSatisfied(r, c)) {
+          return false; // clues unsatisfied
         }
       }
     }
 
-    return true;
+    // illegal lamp check
+    for (int r = 0; r < h; r++) {
+      for (int c = 0; c < w; c++) {
+        if (isLamp(r, c) && isLampIllegal(r, c)) {
+          return false; // illegal lamps
+        }
+      }
+    }
+    return true; // satisfied
   }
 
   @Override
@@ -267,21 +278,7 @@ public class ModelImpl implements Model {
     }
   }
 
-  // ************* HELPER METHODS ************* //
-  private boolean isVisible(int r1, int c1, int r2, int c2) {
-    int dr = Integer.compare(r2, r1);
-    int dc = Integer.compare(c2, c1);
-    int r = r1 + dr;
-    int c = c1 + dc;
-    while (r != r2 || c != c2) {
-      if (activePuzzle.getCellType(r, c) == CellType.WALL) {
-        return false;
-      }
-      r += dr;
-      c += dc;
-    }
-    return true;
-  }
+  // ************* HELPER METHOD ************* //
 
   private int countAdjacentLamps(int r, int c) {
     int count = 0;
