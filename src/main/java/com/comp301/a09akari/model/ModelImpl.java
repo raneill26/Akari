@@ -241,8 +241,10 @@ public class ModelImpl implements Model {
     // illegal lamp check
     for (int r3 = 0; r3 < h; r3++) {
       for (int c3 = 0; c3 < w; c3++) {
-        if (isLamp(r3, c3) && isLampIllegal(r3, c3)) {
-          return false; // illegal lamps
+        if (isLamp(r3, c3)) {
+          if (isLampIllegal(r3, c3)) {
+            return false; // illegal lamps
+            }
         }
       }
     }
