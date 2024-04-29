@@ -221,31 +221,32 @@ public class ModelImpl implements Model {
     int h = activePuzzle.getHeight();
     int w = activePuzzle.getWidth();
     // lit corridors check
-    for (int r = 0; r < h; r++) {
-      for (int c = 0; c < w; c++) {
-        if (activePuzzle.getCellType(r, c) == CellType.CORRIDOR && !isLit(r, c)) {
+    for (int r1 = 0; r1 < h; r1++) {
+      for (int c1 = 0; c1 < w; c1++) {
+        if (activePuzzle.getCellType(r1, c1) == CellType.CORRIDOR && !isLit(r1, c1)) {
           return false; // unlit corridors
         }
       }
     }
 
     // clues satisfied check
-    for (int r = 0; r < h; r++) {
-      for (int c = 0; c < w; c++) {
-        if (activePuzzle.getCellType(r, c) == CellType.CLUE && !isClueSatisfied(r, c)) {
+    for (int r2 = 0; r2 < h; r2++) {
+      for (int c2 = 0; c2 < w; c2++) {
+        if (activePuzzle.getCellType(r2, c2) == CellType.CLUE && !isClueSatisfied(r2, c2)) {
           return false; // clues unsatisfied
         }
       }
     }
 
     // illegal lamp check
-    for (int r = 0; r < h; r++) {
-      for (int c = 0; c < w; c++) {
-        if (isLamp(r, c) && isLampIllegal(r, c)) {
+    for (int r3 = 0; r3 < h; r3++) {
+      for (int c3 = 0; c3 < w; c3++) {
+        if (isLamp(r3, c3) && isLampIllegal(r3, c3)) {
           return false; // illegal lamps
         }
       }
     }
+    notifyObservers();
     return true; // satisfied
   }
 
