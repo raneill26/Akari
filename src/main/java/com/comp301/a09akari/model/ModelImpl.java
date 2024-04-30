@@ -248,7 +248,7 @@ public class ModelImpl implements Model {
         }
       }
     }
-    notifyObservers();
+    // notifyObservers();
     return true; // satisfied
   }
 
