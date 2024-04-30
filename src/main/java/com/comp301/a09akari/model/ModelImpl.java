@@ -275,7 +275,7 @@ public class ModelImpl implements Model {
     observers.remove(observer);
   }
 
-  public void notifyObservers() {
+  public void notifyObservers() { // was private, changed
     for (ModelObserver observer : observers) {
       observer.update(this);
     }

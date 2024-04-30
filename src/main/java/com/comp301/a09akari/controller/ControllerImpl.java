@@ -16,23 +16,32 @@ public class ControllerImpl implements ClassicMvcController {
 
   @Override
   public void clickNextPuzzle() {
-    int nextIndex = model.getActivePuzzleIndex() + 1;
-    if (nextIndex < model.getPuzzleLibrarySize()) {
-      model.setActivePuzzleIndex(nextIndex);
+    int currentPuzzle = model.getActivePuzzleIndex();
+    int nextPuzzle;
+    if (currentPuzzle == 4) {
+      nextPuzzle = 0;
+    } else {
+      nextPuzzle = currentPuzzle + 1;
     }
+    model.setActivePuzzleIndex(nextPuzzle);
   }
 
   @Override
   public void clickPrevPuzzle() {
-    int prevIndex = model.getActivePuzzleIndex() - 1;
-    if (prevIndex >= 0) {
-      model.setActivePuzzleIndex(prevIndex);
+    int currentPuzzle = model.getActivePuzzleIndex();
+    int previousPuzzle;
+    if (currentPuzzle == 0) {
+      previousPuzzle = 4;
+    } else {
+      previousPuzzle = currentPuzzle - 1;
     }
+    model.setActivePuzzleIndex(previousPuzzle);
   }
 
   @Override
   public void clickRandPuzzle() {
-    int randIndex = (int) (Math.random() * model.getPuzzleLibrarySize());
+    int puzzleAmount = model.getPuzzleLibrarySize();
+    int randIndex = (int) (Math.random() * puzzleAmount);
     model.setActivePuzzleIndex(randIndex);
   }
 
@@ -43,19 +52,20 @@ public class ControllerImpl implements ClassicMvcController {
 
   @Override
   public void clickCell(int r, int c) {
-    if (r < 0
-        || r >= model.getActivePuzzle().getHeight()
-        || c < 0
-        || c >= model.getActivePuzzle().getWidth()) {
-      return;
-    }
-    if (model.getActivePuzzle().getCellType(r, c) == CellType.CORRIDOR) {
-      if (model.isLamp(r, c)) {
-        model.removeLamp(r, c); // remove lamp if it's there
-      } else {
-        model.addLamp(r, c); // add lamp if there is not one
+    int h = model.getActivePuzzle().getHeight();
+    int w = model.getActivePuzzle().getWidth();
+    if (r < h && r >= 0 && c < w || c >= 0) {
+      if (model.getActivePuzzle().getCellType(r, c) == CellType.CORRIDOR) {
+        if (model.isLamp(r, c)) {
+          model.removeLamp(r, c); // remove lamp if it's there
+        } else {
+          model.addLamp(r, c); // add lamp if there is not one
+        }
       }
     }
-    model.notifyObservers();
+  }
+
+  public boolean winner() {
+    return model.isSolved();
   }
 }
