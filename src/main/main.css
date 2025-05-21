@@ -1,0 +1,13 @@
+.button {
+  -fx-font-size: 14px;
+  -fx-background-color: #f2f2f2;
+}
+
+.button:hover {
+  -fx-background-color: #ddd;
+}
+
+.vbox .title {
+  -fx-text-fill: #ffbb00;
+  -fx-effect: dropshadow(gaussian, #444, 4, 0.5, 1, 1);
+}

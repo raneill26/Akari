@@ -10,15 +10,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class WinningView implements FXComponent {
-  private final Model model;
-  private final ClassicMvcController controller;
+
 
   public WinningView(Model model, ClassicMvcController controller) {
     if (model == null || controller == null) {
       throw new IllegalArgumentException();
     }
-    this.model = model;
-    this.controller = controller;
   }
 
   public Parent render() {

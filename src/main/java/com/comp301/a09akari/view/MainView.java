@@ -10,14 +10,14 @@ import javafx.scene.layout.BorderPane;
 public class MainView implements FXComponent, ModelObserver {
   private final Scene scene;
   private final FXComponent boardView;
-  private final TitleView titleView;
+  private final BoardView titleView;
   private final WinningView winningView;
   private final Model model;
   private final ClassicMvcController controller;
 
   public MainView(Model model, ClassicMvcController controller) {
-    this.boardView = new BoardView(model, controller);
-    this.titleView = new TitleView(model, controller);
+    this.boardView = new TitleView(model, controller);
+    this.titleView = new BoardView(model, controller);
     this.winningView = new WinningView(model, controller);
     this.model = model;
     this.controller = controller;
