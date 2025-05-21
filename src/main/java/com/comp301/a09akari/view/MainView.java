@@ -22,8 +22,7 @@ public class MainView implements FXComponent, ModelObserver {
     this.model = model;
     this.controller = controller;
     this.model.addObserver(this);
-
-    this.scene = new Scene(render(), 700, 700);
+    this.scene = new Scene(render(), 600, 700);
     this.scene.getStylesheets().add("main.css");
   }
 

@@ -41,9 +41,16 @@ public class BoardView implements FXComponent {
     Button resetPuzzle = new Button("Reset Puzzle");
     resetPuzzle.setOnAction(event -> controller.clickResetPuzzle());
 
-    VBox pane = new VBox();
+    VBox pane = new VBox(15);
     pane.setAlignment(Pos.CENTER);
-    pane.getChildren().addAll(new HBox(nextPuzzle, prevPuzzle, randPuzzle, resetPuzzle), board);
+    pane.getStyleClass().add("vbox"); // <--- HERE
+
+
+    HBox controls = new HBox(10, nextPuzzle, prevPuzzle, randPuzzle, resetPuzzle);
+    controls.setAlignment(Pos.CENTER);
+    controls.getStyleClass().add("hbox");
+
+    pane.getChildren().addAll(controls, board);
 
     // board.add(nextPuzzle, 1, 5);
     // board.add(prevPuzzle, 2, 5);
@@ -55,6 +62,8 @@ public class BoardView implements FXComponent {
 
   private GridPane setUp() {
     GridPane gridPane = new GridPane();
+    gridPane.setAlignment(Pos.CENTER);
+
     int h = model.getActivePuzzle().getHeight();
     int w = model.getActivePuzzle().getWidth();
 

@@ -1,0 +1,48 @@
+.button {
+  background-color: #f2f2f2;
+  -fx-background-color: #f2f2f2;
+
+  font-size: 14px;
+  -fx-font-size: 14px;
+
+  font-weight: normal;
+  -fx-font-weight: normal;
+
+  padding: 6px 12px;
+  -fx-padding: 6 12;
+
+  color: black;
+  -fx-text-fill: black;
+}
+
+.button:hover {
+  background-color: #ddd;
+  -fx-background-color: #ddd;
+}
+
+.vbox .title {
+  color: #ffbb00;
+  -fx-text-fill: #ffbb00;
+
+  font-size: 36px;
+  -fx-font-size: 36px;
+
+  font-weight: bold;
+  -fx-font-weight: bold;
+
+  font-family: Arial;
+  -fx-font-family: Arial;
+
+  -fx-effect: dropshadow(gaussian, #444, 4, 0.5, 1, 1);
+
+  padding: 20px;
+  -fx-padding: 20; 
+  -fx-alignment: center;
+}
+
+.hbox {
+  padding: 10px;
+  -fx-padding: 10;
+  -fx-spacing: 10;
+  -fx-alignment: center;
+}
