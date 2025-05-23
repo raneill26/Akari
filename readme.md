@@ -1,6 +1,6 @@
 # Akari (Light Up) Puzzle Game
 
-This is a JavaFX-based implementation of the game**Akari**, a well known logic puzzle game with the goal of placing light bulbs to illuminate all corridors while adhering to certain rules.
+This is a JavaFX-based implementation of the game **Akari**, a well known logic puzzle game with the goal of placing light bulbs to illuminate all corridors while adhering to certain rules.
 
 ---
 
